@@ -1,8 +1,8 @@
-// TodoApp.tsx
 import { useState } from "react";
 import { SearchBar } from "./SearchBar";
 import { TodoItem } from "./TodoItem";
 import  data  from "../data/todolist"
+
 interface Todo {
   id: number;
   description: string;
