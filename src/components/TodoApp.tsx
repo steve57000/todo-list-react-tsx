@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
-import { SearchBar } from "./SearchBar";
-import { TodoItem } from "./TodoItem";
-// import  data  from "../data/todolist"
+import {useEffect, useState} from "react";
+import {SearchBar} from "./SearchBar";
+import {TodoItem} from "./TodoItem";
 
 interface Todo {
   id: number;
@@ -18,9 +17,7 @@ export function TodoApp() {
 
   // Hook pour sauvegarder, chaque mise à jour de itemList , dans le LocalStorage
   useEffect(() => {
-    if (itemList.length > 0) {
-      localStorage.setItem("todoList", JSON.stringify(itemList));
-    }
+    localStorage.setItem("todoList", JSON.stringify(itemList));
   }, [itemList]);
 
   const addItem = (newItem: string) => {
