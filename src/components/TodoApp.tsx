@@ -1,67 +1,53 @@
-type TodoItem = {
-    id: number,
-    description: string
-    done: boolean
+// TodoApp.tsx
+import { useState } from "react";
+import { SearchBar } from "./SearchBar";
+import { TodoItem } from "./TodoItem";
+import  data  from "../data/todolist"
+interface Todo {
+  id: number;
+  description: string;
+  done: boolean;
 }
 
 export function TodoApp() {
-    return (
-        <>
-            <div className="flex">
+  const [itemList, setItemList] = useState<Todo[]>(data);
 
-                <label className="input input-bordered flex items-center gap-2">
-                    <input type="text" className="grow" placeholder="Ajouter une tâche" />
-                </label>
+  const addItem = (newItem: string) => {
+    if (newItem.trim()) {
+      const newTask: Todo = {
+        id: Date.now(),
+        description: newItem,
+        done: false,
+      };
+      setItemList([...itemList, newTask]);
+    }
+  };
 
-                <button className="btn btn-primary">+</button>
+  const toggleDone = (id: number) => {
+    setItemList(itemList.map(item => item.id === id ? { ...item, done: !item.done } : item));
+  };
 
-            </div>
+  const removeItem = (id: number) => {
+    setItemList(itemList.filter(item => item.id !== id));
+  };
 
-            <div className="my-5 flex-column gap-5 w-full text-left">
-                {/* TODO ITEM version normal */}
-                <div className="bg-indigo-700 w-full m-5 rounded-box p-3 flex">
-                    <span className="pr-8">
-                        <input type="checkbox" className="checkbox" />
-                    </span>
-                    <span className="flex-grow">
-                        Acheter des oranges
-                    </span>
-                    <div>
-                        <button className="btn btn-error btn-outline btn-xs">
-                            X
-                        </button>
-                    </div>
-                </div>
+  const sortedItems = [...itemList].sort((a, b) => Number(a.done) - Number(b.done));
 
-                {/* TODO Item version cochée */}
-                <div className="bg-indigo-900 w-full m-5 rounded-box p-3 flex">
-                    <span className="pr-8">
-                        <input type="checkbox" checked={true} className="checkbox" />
-                    </span>
-                    <span className="flex-grow line-through">
-                        Courir avec le fraté
-                    </span>
-                    <div>
-                        <button className="btn btn-error btn-outline btn-xs">
-                            X
-                        </button>
-                    </div>
-                </div>
-
-                <div className="bg-indigo-900 w-full m-5 rounded-box p-3 flex">
-                    <span className="pr-8">
-                        <input type="checkbox" checked={true} className="checkbox" />
-                    </span>
-                    <span className="flex-grow line-through">
-                        Me faire défoncer à LoL
-                    </span>
-                    <div>
-                        <button className="btn btn-error btn-outline btn-xs">
-                            X
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </>
-    )
+  return (
+    <>
+      <SearchBar onAdd={addItem} />
+      <div className="my-5 flex-column gap-5 w-full text-left">
+        {sortedItems.map((item) => (
+          <TodoItem
+            key={item.id}
+            id={item.id}
+            description={item.description}
+            done={item.done}
+            onToggle={toggleDone}
+            onRemove={removeItem}
+          />
+        ))}
+      </div>
+    </>
+  );
 }
