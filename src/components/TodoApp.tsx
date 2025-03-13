@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SearchBar } from "./SearchBar";
 import { TodoItem } from "./TodoItem";
-import  data  from "../data/todolist"
+// import  data  from "../data/todolist"
 
 interface Todo {
   id: number;
@@ -10,7 +10,18 @@ interface Todo {
 }
 
 export function TodoApp() {
-  const [itemList, setItemList] = useState<Todo[]>(data);
+  const [itemList, setItemList] = useState<Todo[]>(() => {
+    //  Charger la to do list depuis le LocalStorage au démarrage
+    const savedTasks = localStorage.getItem("todoList");
+    return savedTasks ? JSON.parse(savedTasks) : [];
+  });
+
+  // Hook pour sauvegarder, chaque mise à jour de itemList , dans le LocalStorage
+  useEffect(() => {
+    if (itemList.length > 0) {
+      localStorage.setItem("todoList", JSON.stringify(itemList));
+    }
+  }, [itemList]);
 
   const addItem = (newItem: string) => {
     if (newItem.trim()) {
