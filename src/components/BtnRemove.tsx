@@ -1,14 +1,16 @@
 interface BtnRemoveProps {
-  onClick: () => void
+  onClick: () => void;
+  contentTxt: string;
+  addClass : string
 }
 
-export function BtnRemove({onClick}: BtnRemoveProps) {
+export function BtnRemove({onClick, contentTxt, addClass}: BtnRemoveProps ) {
   return (
     <button
       onClick={onClick}
-      className="btn btn-error btn-outline btn-xs ml-4"
+      className={addClass}
     >
-      X
+      {contentTxt}
     </button>
   );
 }
